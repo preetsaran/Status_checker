@@ -8,7 +8,7 @@ let strValues = [];
 let data = {};
 
 let setLocalStorage = async function (driver) { 
-    console.log("Getting Local Storage".blue);
+    console.log("Setting Local Storage".blue);
     let myobj = await fs.promises.readFile('./ls.json');
     myobj = JSON.parse(myobj);
     strkeys = JSON.stringify(Object.keys(myobj));
