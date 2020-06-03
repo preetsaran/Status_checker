@@ -14,3 +14,6 @@ Go to cmd -> run commands ->
 3. node wAscript.js
 
 That's it
+
+# Working
+Just replace name of the contacts you want to check the status of in response.json file.
