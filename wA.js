@@ -12,7 +12,7 @@ let announce = require('./announce.js');
   let statusArr = [];
   try {
     await driver.manage().setTimeouts({
-      implicit: 25000,
+      implicit: 20000,
       pageLoad: 20000,
     });
 
@@ -39,36 +39,62 @@ let announce = require('./announce.js');
       if (flag) {
 
         console.log("Logged in successfully".bgGreen);
+
         let search = await driver.findElement(swd.By.css('._3FRCZ'));  //c2
+         
         let names = await fs.promises.readFile('./response.json');
         names = JSON.parse(names);
 
         async function statusChecker(name,idx) {
           try {
-            await search.sendKeys(`${name}` + '\n');
-            
-            let status = await driver.findElement(
-              swd.By.css('._2ruUq > span') //c3
-            );
+                await search.sendKeys(`${name}` + '\n');
+                let sdata;
+                let status;
 
-            let sdata = await status.getText();
+                try {
+                    status = await driver.findElement(
+                    swd.By.css('._2ruUq > span') //c3
+                  );
+                  sdata = await status.getText();
+                  console.log("Y".bgYellow);
+                  
+                }
+                catch (error)
+                {
+                  sdata = `${name} is not in your contacts`;
+                  let cross = await driver.findElement(swd.By.css('.MfAhJ > span'));  
+                  await cross.click();
+                  console.log("X clicked".bgYellow);
+                }
+                
+                finally {
 
-            let i = 0;
+                  if (sdata.includes('is not in your contacts'))
+                  {
+                    statusArr.push(sdata);
+                    names[idx].status = sdata;
+                    return sdata;
+                  }
+                  
+                  let i = 0;
 
-            while (sdata == 'click here for contact info' || i <= 2) {
-              sdata = await status.getText();
-              i++;
-            }
+                  while (sdata == 'click here for contact info' || i <= 2) {
+                    sdata = await status.getText();
+                    i++;
+                  }
+
+                  if (sdata.includes('online')) {
+                    statusArr.push(` ${name} is ${sdata}`);
+                    names[idx].status = sdata;
+                  } else {
+                    statusArr.push(` ${name}  ${sdata}`);
+                    names[idx].status = sdata;
+                  }
+
+                  return sdata;
+              }
            
-            if (sdata.includes('online')) {
-              statusArr.push(` ${name} is ${sdata}`);
-              names[idx].status = sdata;
-            } else {
-              statusArr.push(` ${name}  ${sdata}`);
-              names[idx].status = sdata;
-            }
-            
-            return sdata;
+
           } catch (error) {
             statusArr.push(` ${name}'s Status is hidden`);
             names[idx].status = ` ${name}'s Status is hidden`;
