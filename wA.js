@@ -12,26 +12,25 @@ let announce = require('./announce.js');
   let statusArr = [];
   try {
     await driver.manage().setTimeouts({
-      implicit: 20000,
-      pageLoad: 10000,
+      implicit: 25000,
+      pageLoad: 20000,
     });
 
     await driver.get('https://web.whatsapp.com/');
 
     async function whatsappMain() {
+      
       let flag = true;
       await setLocalStorage(driver);
-      driver.get('https://web.whatsapp.com/');
+      await driver.get('https://web.whatsapp.com/');
       
       try {
-        let uel = await driver.findElement(swd.By.css('._2MSJr'));
+        let uel = await driver.findElement(swd.By.css('._3e4VU')); // c1
         await uel.click();
-        console.log("Logged in successfully".bgGreen);
-        getLocalStorage(driver, () => {});
+        await getLocalStorage(driver,()=>{});
         flag = true;
       } catch (error) {
         flag = false;
-        console.log("Getting Local Storage".bgBlue);
         getLocalStorage(driver, whatsappMain);
         return;
       }
@@ -39,7 +38,8 @@ let announce = require('./announce.js');
 
       if (flag) {
 
-        let search = await driver.findElement(swd.By.css('._2S1VP'));
+        console.log("Logged in successfully".bgGreen);
+        let search = await driver.findElement(swd.By.css('._3FRCZ'));  //c2
         let names = await fs.promises.readFile('./response.json');
         names = JSON.parse(names);
 
@@ -48,7 +48,7 @@ let announce = require('./announce.js');
             await search.sendKeys(`${name}` + '\n');
             
             let status = await driver.findElement(
-              swd.By.css('span.O90ur._3FXB1')
+              swd.By.css('._2ruUq > span') //c3
             );
 
             let sdata = await status.getText();
