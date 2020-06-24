@@ -5,7 +5,7 @@ let swd = require('selenium-webdriver');
 let data = {};
 
 let getLocalStorage = async function (driver, whatsappMain) {
-
+    console.log("Getting Local Storage".bgBlue);
     await driver.executeScript(" keys = [], values = []");
 
     keys = await driver.executeScript("for(let i = 0; i < localStorage.length; i++) { keys[i] = localStorage.key(i)} return keys");
@@ -20,9 +20,9 @@ let getLocalStorage = async function (driver, whatsappMain) {
         await fs.promises.writeFile('./ls.json', JSON.stringify(data));
         whatsappMain();
     } else {
+        console.log("loop".bgRed)
         getLocalStorage(driver, whatsappMain);
     }
-
 }
 
 module.exports = getLocalStorage;
