@@ -56,15 +56,13 @@ let announce = require('./announce.js');
                     swd.By.css('._2ruUq > span') //c3
                   );
                   sdata = await status.getText();
-                  console.log("Y".bgYellow);
                   
                 }
                 catch (error)
                 {
                   sdata = `${name} is not in your contacts`;
-                  let cross = await driver.findElement(swd.By.css('.MfAhJ > span'));  
+                  let cross = await driver.findElement(swd.By.css('.MfAhJ > span'));  //c4
                   await cross.click();
-                  console.log("X clicked".bgYellow);
                 }
                 
                 finally {
